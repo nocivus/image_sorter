@@ -1,0 +1,65 @@
+AllCops:
+  TargetRubyVersion: 2.5.3
+  Exclude:
+    - "tmp/**/*"
+    - "db/schema.rb"
+    - "db/seeds.rb"
+    - "db/data/*"
+    - "db/migrate/*"
+    - "Gemfile"
+    - "Rakefile"
+    - "Invalidate"
+    - "bin/**/*"
+
+Layout/AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+
+Style/FormatStringToken:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 125
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/ClassLength:
+  Max: 100
+  Exclude:
+    - "spec/**/*"
+
+Metrics/ModuleLength:
+  Max: 100
+  Exclude:
+    - "spec/**/*"
+    - "app/helpers/constants.rb"
+
+Metrics/MethodLength:
+  Max: 25
+  Exclude:
+    - "spec/**/*"
+
+Metrics/BlockLength:
+  Max: 25
+  Exclude:
+    - "spec/**/*"
+
+Style/Documentation:
+  Exclude:
+    - "db/**/*"
+
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
