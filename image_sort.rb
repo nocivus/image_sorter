@@ -21,31 +21,39 @@ def find_images(folder)
   paths
 end
 
-def process_images(paths)
-  total_processed = 0
-  total_skipped = 0
-  paths.each do |path|
-    filename = File.basename(path)
-    info = EXIFR::JPEG.new(path)
+def move_file(time, path)
+  filename = File.basename(path)
+  year  = time.year.to_s
+  month = time.strftime("%m")
+  new_folder = File.join(PHOTO_FOLDER_NAME, year, month)
 
+  # Create folder if non existing
+  FileUtils.mkdir_p(new_folder)
+
+  # Skip if file exists
+  return :skipped if File.exist?(File.join(new_folder, filename))
+
+  # Otherwise move the file
+  FileUtils.mv(path, new_folder)
+  :processed
+end
+
+def process_images(paths)
+  totals = { processed: 0, skipped: 0 }
+
+  paths.each do |path|
     # Do we have date time information?
+    info = EXIFR::JPEG.new(path)
     time = info.date_time
     next unless time
 
-    # If we do, create the necessary folder, if non existing
-    year  = time.year.to_s
-    month = time.strftime("%-m")
-    new_folder = File.join(PHOTO_FOLDER_NAME, year, month)
-    FileUtils.mkdir_p(new_folder)
-    if File.exist?(File.join(new_folder, filename))
-      total_skipped += 1
-    else
-      FileUtils.mv(path, new_folder)
-      total_processed += 1
-    end
+    # Move file (or attempt to)
+    result = move_file(time, path)
+    totals[result] += 1
   end
-  ap "Processed #{total_processed} out of #{paths.count} images found. " \
-     "Skipped for already existing: #{total_skipped}"
+
+  ap "Processed #{totals[:processed]} out of #{paths.count} images found. " \
+     "Skipped for already existing: #{totals[:skipped]}"
 end
 
 if $PROGRAM_NAME == __FILE__
